@@ -8,16 +8,20 @@ Support for ISBN-13 is essential, whereas support
 for ISBN-10 is optional.
 Here are some valid examples of each:
 
-ISBN-10:    0471958697
-            0 471 60695 2
-            0-470-84525-2
-            0-321-14653-0
+ISBN-10:
 
-ISBN-13:    9780470059029
-            978 0 471 48648 0
-            978-0596809485
-            978-0-13-149505-0
-            978-0-262-13472-9
+        0471958697
+        0 471 60695 2
+        0-470-84525-2
+        0-321-14653-0
+
+ISBN-13:
+
+        9780470059029
+        978 0 471 48648 0
+        978-0596809485
+        978-0-13-149505-0
+        978-0-262-13472-9
 
 ISBN-10 is made up of 9 digits plus a check digit (which
 may be 'X') and ISBN-13 is made up of 12 digits plus a
