@@ -74,6 +74,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ExpectectedIsbnTrue.cs" />
     <Compile Include="ExpectedExceptions.cs" />
     <Compile Include="IsbnUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,13 +13,14 @@ namespace Isbn
         public bool IsValid(string isbn)
         {
             ArgumentNotNullOrEmptyString(isbn, nameof(isbn));
-            if (isbn.Length == 10)
+            var s = RemoveNonIntegers(isbn);
+            if (s.Length == 10)
             {
                 return IsValidIsbn10(isbn);
             }
-            else if (isbn.Length == 13)
+            else if (s.Length == 13)
             {
-                return IsValidIsbn13(isbn);
+                return IsValidIsbn13(s, out _);
             }
             return false;
         }
@@ -32,21 +33,45 @@ namespace Isbn
             return false;
         }
 
-        private bool IsValidIsbn13(string isbn)
+        private bool IsValidIsbn13(string isbn, out string correctIsbn)
         {
-            var s = RemoveNonIntegers(isbn);
-            if (s.Length < 13) throw new ArgumentException();
+            correctIsbn = isbn.Substring(0, 12) + Isbn13Checksum(isbn);
 
+            return (correctIsbn == isbn);
+        }
+
+        private static string Isbn10Checksum(string isbn)
+        {
+            int sum = 0;
+            for (int i = 0; i < 9; i++)
+                sum += (10 - i) * Int32.Parse(isbn[i].ToString());
+
+            float div = sum / 11;
+            float rem = sum % 11;
+
+            if (rem == 0)
+                return "0";
+            else if (rem == 1)
+                return "X";
+            else
+                return (11 - rem).ToString();
+        }
+
+        private static string Isbn13Checksum(string isbn)
+        {
             float sum = 0;
-            for (var i = 0; i < 12; i++)
+            for (int i = 0; i < 12; i++)
             {
-                sum += (i % 2 == 0 ? 1 : 3) * int.Parse(s[i].ToString());
+                sum += ((i % 2 == 0) ? 1 : 3) * Int32.Parse(isbn[i].ToString());
             }
 
-            var rem = sum % 10;
+            float div = sum / 10;
+            float rem = sum % 10;
 
-            var checkDigit = Math.Abs(rem) < 0 ? "0" : (10 - rem).ToString(CultureInfo.InvariantCulture);
-            return checkDigit.ToString().Equals(s.ToCharArray()[12]);
+            if (rem == 0)
+                return "0";
+            else
+                return (10 - rem).ToString();
         }
 
         /// <summary>
