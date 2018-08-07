@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isbn", "Isbn\Isbn.csproj", "{02F93A4E-4D47-4D25-9E74-9BB99BFE21EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isbn.Tests", "Isbn.Tests01\Isbn.Tests.csproj", "{D9C5DE45-087E-4386-ABB2-B1017BF311FA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsbnUnitTests", "IsbnUnitTests\IsbnUnitTests.csproj", "{E87B2E9A-69D1-45DD-A92B-725A12F64B36}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{02F93A4E-4D47-4D25-9E74-9BB99BFE21EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02F93A4E-4D47-4D25-9E74-9BB99BFE21EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02F93A4E-4D47-4D25-9E74-9BB99BFE21EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9C5DE45-087E-4386-ABB2-B1017BF311FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9C5DE45-087E-4386-ABB2-B1017BF311FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9C5DE45-087E-4386-ABB2-B1017BF311FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9C5DE45-087E-4386-ABB2-B1017BF311FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E87B2E9A-69D1-45DD-A92B-725A12F64B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E87B2E9A-69D1-45DD-A92B-725A12F64B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E87B2E9A-69D1-45DD-A92B-725A12F64B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
