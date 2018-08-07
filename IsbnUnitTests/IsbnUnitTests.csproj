@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="ExpectectedIsbnTrue.cs" />
     <Compile Include="ExpectedExceptions.cs" />
+    <Compile Include="ExpectedIsbnFalse.cs" />
     <Compile Include="IsbnUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

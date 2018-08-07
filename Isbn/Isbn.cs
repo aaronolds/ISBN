@@ -1,77 +1,89 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Isbn
 {
     public class IsbnValidator
     {
+        private const float MIN_NORMAL = 0.000f;
+
+        /// <summary>
+        ///     Returns true if ... is valid.
+        /// </summary>
+        /// <param name="isbn">The isbn.</param>
+        /// <returns>
+        ///     <c>true</c> if the specified isbn is valid; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsValid(string isbn)
         {
             ArgumentNotNullOrEmptyString(isbn, nameof(isbn));
-            var s = RemoveNonIntegers(isbn);
-            if (s.Length == 10)
-            {
-                return IsValidIsbn10(isbn);
-            }
-            else if (s.Length == 13)
-            {
-                return IsValidIsbn13(s, out _);
-            }
-            return false;
+            var unformatedIsbn = RemoveNonIntegers(isbn);
+            if (unformatedIsbn.Length == 10) return IsValidIsbn10(unformatedIsbn, out _);
+
+            return unformatedIsbn.Length == 13 && IsValidIsbn13(unformatedIsbn, out _);
         }
 
-        private bool IsValidIsbn10(string isbn)
+        /// <summary>
+        ///     Determines whether [is valid isbn10] [the specified isbn].
+        /// </summary>
+        /// <param name="isbn">The isbn.</param>
+        /// <param name="correctIsbn">The correct isbn.</param>
+        /// <returns>
+        ///     <c>true</c> if [is valid isbn10] [the specified isbn]; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentException"></exception>
+        private static bool IsValidIsbn10(string isbn, out string correctIsbn)
         {
-            var s = RemoveNonIntegers(isbn);
-            if (s.Length < 10) throw new ArgumentException();
-
-            return false;
+            correctIsbn = isbn.Substring(0, 9) + Isbn10Checksum(isbn);
+            return correctIsbn == isbn;
         }
 
-        private bool IsValidIsbn13(string isbn, out string correctIsbn)
-        {
-            correctIsbn = isbn.Substring(0, 12) + Isbn13Checksum(isbn);
-
-            return (correctIsbn == isbn);
-        }
-
+        /// <summary>
+        ///     Isbn10s the checksum.
+        /// </summary>
+        /// <param name="isbn">The isbn.</param>
+        /// <returns></returns>
         private static string Isbn10Checksum(string isbn)
         {
-            int sum = 0;
-            for (int i = 0; i < 9; i++)
-                sum += (10 - i) * Int32.Parse(isbn[i].ToString());
+            var sum = 0;
+            for (var i = 0; i < 9; i++) sum += (10 - i) * int.Parse(isbn[i].ToString());
 
-            float div = sum / 11;
-            float rem = sum % 11;
+            var rem = sum % 11;
 
-            if (rem == 0)
+            if (Math.Abs(rem) <= MIN_NORMAL)
                 return "0";
-            else if (rem == 1)
-                return "X";
-            else
-                return (11 - rem).ToString();
+
+            return rem == 1 ? "X" : (11 - rem).ToString(CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        ///     Determines whether [is valid isbn13] [the specified isbn].
+        /// </summary>
+        /// <param name="isbn">The isbn.</param>
+        /// <param name="correctIsbn">The correct isbn.</param>
+        /// <returns>
+        ///     <c>true</c> if [is valid isbn13] [the specified isbn]; otherwise, <c>false</c>.
+        /// </returns>
+        private static bool IsValidIsbn13(string isbn, out string correctIsbn)
+        {
+            correctIsbn = isbn.Substring(0, 12) + Isbn13Checksum(isbn);
+            return correctIsbn == isbn;
+        }
+
+        /// <summary>
+        ///     Isbn13s the checksum.
+        /// </summary>
+        /// <param name="isbn">The isbn.</param>
+        /// <returns></returns>
         private static string Isbn13Checksum(string isbn)
         {
             float sum = 0;
-            for (int i = 0; i < 12; i++)
-            {
-                sum += ((i % 2 == 0) ? 1 : 3) * Int32.Parse(isbn[i].ToString());
-            }
+            for (var i = 0; i < 12; i++) sum += (i % 2 == 0 ? 1 : 3) * int.Parse(isbn[i].ToString());
 
-            float div = sum / 10;
-            float rem = sum % 10;
+            var rem = sum % 10;
 
-            if (rem == 0)
-                return "0";
-            else
-                return (10 - rem).ToString();
+            return Math.Abs(rem) <= MIN_NORMAL ? "0" : (10 - rem).ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -81,7 +93,7 @@ namespace Isbn
         /// <returns></returns>
         private static string RemoveNonIntegers(string isbn)
         {
-            return Regex.Replace(isbn, "[^0-9]", "");
+            return Regex.Replace(isbn, "[^0-9X]", "");
         }
 
         /// <summary>
