@@ -8,20 +8,45 @@ using System.Threading.Tasks;
 
 namespace Isbn
 {
-    public class Isbn
+    public class IsbnValidator
     {
-        public string Isbn13Checksum(string isbn)
+        public bool IsValid(string isbn)
         {
             ArgumentNotNullOrEmptyString(isbn, nameof(isbn));
+            if (isbn.Length == 10)
+            {
+                return IsValidIsbn10(isbn);
+            }
+            else if (isbn.Length == 13)
+            {
+                return IsValidIsbn13(isbn);
+            }
+            return false;
+        }
+
+        private bool IsValidIsbn10(string isbn)
+        {
             var s = RemoveNonIntegers(isbn);
-            if (s.Length < 12) throw new ArgumentException();
+            if (s.Length < 10) throw new ArgumentException();
+
+            return false;
+        }
+
+        private bool IsValidIsbn13(string isbn)
+        {
+            var s = RemoveNonIntegers(isbn);
+            if (s.Length < 13) throw new ArgumentException();
 
             float sum = 0;
-            for (var i = 0; i < 12; i++) sum += (i % 2 == 0 ? 1 : 3) * int.Parse(s[i].ToString());
+            for (var i = 0; i < 12; i++)
+            {
+                sum += (i % 2 == 0 ? 1 : 3) * int.Parse(s[i].ToString());
+            }
 
             var rem = sum % 10;
 
-            return Math.Abs(rem) < 0 ? "0" : (10 - rem).ToString(CultureInfo.InvariantCulture);
+            var checkDigit = Math.Abs(rem) < 0 ? "0" : (10 - rem).ToString(CultureInfo.InvariantCulture);
+            return checkDigit.ToString().Equals(s.ToCharArray()[12]);
         }
 
         /// <summary>
