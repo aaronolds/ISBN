@@ -39,6 +39,7 @@ namespace IsbnUnitTests
                     yield return new TestCaseData(@"80\0\6\y\t");
                     yield return new TestCaseData("          ");
                     yield return new TestCaseData("0w...00...");
+                    yield return new TestCaseData("XXXXXXXXXX");
                 }
             }
 

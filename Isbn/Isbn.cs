@@ -18,8 +18,10 @@ namespace Isbn
         public bool IsValid(string isbn)
         {
             ArgumentNotNullOrEmptyString(isbn, nameof(isbn));
+            var endsWithX = isbn.EndsWith("X");
+
             var unformatedIsbn = RemoveNonIntegers(isbn);
-            if (unformatedIsbn.Length == 10) return IsValidIsbn10(unformatedIsbn, out _);
+            if ((unformatedIsbn.Length == 10) || (unformatedIsbn.Length == 9 && endsWithX)) return IsValidIsbn10(unformatedIsbn, endsWithX, out _);
 
             return unformatedIsbn.Length == 13 && IsValidIsbn13(unformatedIsbn, out _);
         }
@@ -28,13 +30,18 @@ namespace Isbn
         ///     Determines whether [is valid isbn10] [the specified isbn].
         /// </summary>
         /// <param name="isbn">The isbn.</param>
+        /// <param name="endsWithX">Ends with an X</param>
         /// <param name="correctIsbn">The correct isbn.</param>
         /// <returns>
         ///     <c>true</c> if [is valid isbn10] [the specified isbn]; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
-        private static bool IsValidIsbn10(string isbn, out string correctIsbn)
+        private static bool IsValidIsbn10(string isbn, bool endsWithX, out string correctIsbn)
         {
+            if (endsWithX)
+            {
+                isbn += "X";
+            }
             correctIsbn = isbn.Substring(0, 9) + Isbn10Checksum(isbn);
             return correctIsbn == isbn;
         }
@@ -101,7 +108,7 @@ namespace Isbn
         /// <returns></returns>
         private static string RemoveNonIntegers(string isbn)
         {
-            return Regex.Replace(isbn, "[^0-9X]", "");
+            return Regex.Replace(isbn, "[^0-9]", "");
         }
 
         /// <summary>
