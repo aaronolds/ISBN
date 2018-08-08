@@ -47,12 +47,17 @@ namespace Isbn
         private static string Isbn10Checksum(string isbn)
         {
             var sum = 0;
-            for (var i = 0; i < 9; i++) sum += (10 - i) * int.Parse(isbn[i].ToString());
+            for (var i = 0; i < 9; i++)
+            {
+                sum += (10 - i) * int.Parse(isbn[i].ToString());
+            }
 
             var rem = sum % 11;
 
             if (Math.Abs(rem) <= MIN_NORMAL)
+            {
                 return "0";
+            }
 
             return rem == 1 ? "X" : (11 - rem).ToString(CultureInfo.InvariantCulture);
         }
@@ -79,7 +84,10 @@ namespace Isbn
         private static string Isbn13Checksum(string isbn)
         {
             float sum = 0;
-            for (var i = 0; i < 12; i++) sum += (i % 2 == 0 ? 1 : 3) * int.Parse(isbn[i].ToString());
+            for (var i = 0; i < 12; i++)
+            {
+                sum += (i % 2 == 0 ? 1 : 3) * int.Parse(isbn[i].ToString());
+            }
 
             var rem = sum % 10;
 
